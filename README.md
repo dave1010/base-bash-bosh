@@ -6,15 +6,15 @@ We built this as a tool to solve a problem, and it works great for us. However i
 
 ## Prerequisites:
  
-* You will need the following on your machine `sshpass` `git`
+* You will need the following on your machine `sshpass` `git`. To install from Ubuntu / Debian
 
-        ubuntu: sudo apt-get install sshpass git
+        sudo apt-get install sshpass git
 
 ## Installation
 
 Run the following commands
 
-    composer require wearebase/bosh:~1.0.16
+    composer require wearebase/bosh:~1
     composer install
 
 ## Setup
@@ -58,13 +58,13 @@ The script is called with two parameters. The first is the name of the environme
 
 #### What it does
 
-Firstly, the code base will be cloned from git using your commits that you have made locally (instead of the remote git server). This clone will be placed in `./dist` temporarily
+Firstly, the code base will be cloned from git using your commits that you have made locally (instead of the remote git server). This clone will be placed in `./dist` temporarily.
 
 This deploy script will call the build script (the location of which is defined in the `bosh-config` file. This location is local to the root of your project) to prepare the site for deployment. This means that dependencies, pre-compiled files, minified scripts and anything else not source controlled will all have been placed in the `./dist` directory alongside your source controlled code. If you wish to call a build script which is outside the project root, you will need to create a script inside which then proxies to the external script.
 
 This code will then be zipped, moved to the remote server and unzipped and placed into the releases folder under the timestamp it was deployed at. Any shared directories as defined in `shared-paths.sh` (for files which are not source controlled such as user uploads) will be symbolically linked into the release folder, and a symbolic link which points to the current release will be updated so that `current` now points to your new release.
 
-Within the `bosh-config` file there are arrays for `PRE_PUBLISH` and `POST_PUBLISH` commands which are run before the symbolic link `current` is updated and after. This is where unit tests and other checking tools will be run. If any of part of the script fails to pass the script will bail out.
+Within the `bosh-config` file there are arrays for `PRE_PUBLISH` and `POST_PUBLISH` commands which are run before the symbolic link `current` is updated and after. This is where final pre-launch checks and post-build commands (eg clearing cache) will be run. If any of part of the script fails to pass the script will bail out.
 
 ### Sync Database
 
